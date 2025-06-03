@@ -3,7 +3,6 @@ from data import users, list_hewan
 from strategi_pembayaran import TransferBank, EWallet
 from form_adopsi import FormAdopsi
 from util import input_validasi
-from observer import AdoptionMediator # Import AdoptionMediator
 
 strategi_pembayaran = {
     "1": TransferBank(),
@@ -21,6 +20,7 @@ def tampilkan_detail_hewan(hewan):
             print(f"  - {vaksin}")
     else:
         print("  Tidak ada informasi vaksin yang tersedia.")
+    print(f"Harga Adopsi: Rp{hewan.harga_adopsi:,}") # Tambahkan baris ini
 
 def proses_chat_shelter(hewan):
     print(f"\n--- CHAT SHELTER ({hewan.shelter.nama}) ---")
@@ -28,9 +28,7 @@ def proses_chat_shelter(hewan):
     print("Shelter: Ya, masih tersedia. Silakan ajukan adopsi atau kunjungi kami.")
 
 def proses_adopsi(hewan, user):
-    # Inisialisasi mediator dan passing ke FormAdopsi
-    mediator = AdoptionMediator(hewan.shelter)
-    form = FormAdopsi(hewan, user, hewan.shelter, mediator)
+    form = FormAdopsi(hewan, user, hewan.shelter)
     form.ajukan()
     print("[✔] Status: Permintaan adopsi telah dikirim ke shelter. Silakan lanjutkan dengan kunjungan.")
 
@@ -40,17 +38,17 @@ def proses_kunjungan(hewan, user):
     print("- Pengecekan lokasi shelter (untuk memastikan kondisi hewan)")
     print("- Pengecekan kondisi tempat tinggal calon adopter (untuk memastikan kelayakan adopsi)")
     print("Silakan hubungi shelter untuk menjadwalkan waktu yang sesuai.")
-    print(f"Kontak Shelter {hewan.shelter.nama}: (0812-3456-7890)")
-
+    print(f"Kontak Shelter {hewan.shelter.nama}: (contoh: 0812-3456-7890)")
+    
     tanggal_kunjungan = datetime.date.today() + datetime.timedelta(days=3)
     print(f"📅 Permintaan kunjungan Anda akan diteruskan ke shelter. Mohon menunggu konfirmasi jadwal.")
     print(f"✅ Kunjungan dijadwalkan pada: {tanggal_kunjungan.strftime('%d %B %Y')}")
-
+    
     print("\n--- SIMULASI KUNJUNGAN ---")
     print("🔍 Kunjungan telah dilakukan.")
     print("✅ Shelter menyatakan Anda layak sebagai adopter.")
     print("✅ Data hewan sesuai dan cocok untuk diadopsi.")
-
+    
     lanjut = input_validasi("Lanjut ke pembayaran adopsi? (ya/tidak): ", ["ya", "tidak"])
     if lanjut == "ya":
         proses_pembayaran(hewan, user)
@@ -59,13 +57,11 @@ def proses_kunjungan(hewan, user):
 
 def proses_pembayaran(hewan, user):
     print("\n--- PEMBAYARAN ADOPSI ---")
-    # Inisialisasi mediator dan passing ke FormAdopsi (opsional, tergantung interaksi apa yang ingin dimediasi di sini)
-    mediator = AdoptionMediator(hewan.shelter)
-    form = FormAdopsi(hewan, user, hewan.shelter, mediator)
+    form = FormAdopsi(hewan, user, hewan.shelter)
     print("Metode Pembayaran:\n[1] Transfer Bank\n[2] E-Wallet")
     metode = input_validasi("Pilih metode: ", ["1", "2"])
     form.set_metode_pembayaran(strategi_pembayaran[metode])
-    form.metode.bayar(form.jumlah)
+    form.metode.bayar(hewan.harga_adopsi) # Ambil harga dari atribut hewan
     print(f"✅ Pembayaran berhasil. Invoice ID: {form.invoice_id}")
 
     konfirmasi_adopsi = input_validasi("Apakah adopsi telah dikonfirmasi dan hewan telah Anda terima? (ya/tidak): ", ["ya", "tidak"])

@@ -12,12 +12,12 @@ class Shelter(Observer):
     def update(self, pesan):
         print(f"[Notifikasi untuk {self.nama}] {pesan}")
 
-class Mediator(ABC): # Kelas baru untuk Mediator
+class Mediator(ABC): 
     @abstractmethod
     def notify(self, sender, event):
         pass
 
-class AdoptionMediator(Mediator): # Implementasi Mediator
+class AdoptionMediator(Mediator): 
     def __init__(self, shelter):
         self._shelter = shelter
 
