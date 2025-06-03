@@ -13,7 +13,6 @@ class FormAdopsi:
         self.metode = metode
 
     def ajukan(self):
-        self.metode.bayar(self.jumlah)
-        print(f"Invoice created dengan ID: {self.invoice_id}")
+        print(f"📄 Permintaan adopsi diajukan untuk {self.hewan.nama} oleh {self.user}.")
+        print(f"Invoice ID: {self.invoice_id}")
         self.shelter.update(f"Permintaan adopsi untuk {self.hewan.nama} dari {self.user}")
-        print(f"🎉 Permintaan adopsi telah diajukan untuk {self.hewan.nama} oleh {self.user}\n")

@@ -1,3 +1,4 @@
+import datetime
 from data import users, list_hewan
 from strategi_pembayaran import TransferBank, EWallet
 from form_adopsi import FormAdopsi
@@ -27,11 +28,40 @@ def proses_chat_shelter(hewan):
 
 def proses_adopsi(hewan, user):
     form = FormAdopsi(hewan, user, hewan.shelter)
-    print("\nMetode Pembayaran:\n[1] Transfer Bank\n[2] E-Wallet")
+    form.ajukan()
+    print("[✔] Status: Permintaan adopsi telah dikirim ke shelter. Silakan lanjutkan dengan kunjungan.")
+
+def proses_kunjungan(hewan, user):
+    print("\n--- JADWALKAN KUNJUNGAN ---")
+    print("Kunjungan ini meliputi:")
+    print("- Pengecekan lokasi shelter (untuk memastikan kondisi hewan)")
+    print("- Pengecekan kondisi tempat tinggal calon adopter (untuk memastikan kelayakan adopsi)")
+    print("Silakan hubungi shelter untuk menjadwalkan waktu yang sesuai.")
+    print(f"Kontak Shelter {hewan.shelter.nama}: (contoh: 0812-3456-7890)")
+    
+    tanggal_kunjungan = datetime.date.today() + datetime.timedelta(days=3)
+    print(f"📅 Permintaan kunjungan Anda akan diteruskan ke shelter. Mohon menunggu konfirmasi jadwal.")
+    print(f"✅ Kunjungan dijadwalkan pada: {tanggal_kunjungan.strftime('%d %B %Y')}")
+    
+    print("\n--- SIMULASI KUNJUNGAN ---")
+    print("🔍 Kunjungan telah dilakukan.")
+    print("✅ Shelter menyatakan Anda layak sebagai adopter.")
+    print("✅ Data hewan sesuai dan cocok untuk diadopsi.")
+    
+    lanjut = input_validasi("Lanjut ke pembayaran adopsi? (ya/tidak): ", ["ya", "tidak"])
+    if lanjut == "ya":
+        proses_pembayaran(hewan, user)
+    else:
+        print("❗ Adopsi dibatalkan sebelum pembayaran.")
+
+def proses_pembayaran(hewan, user):
+    print("\n--- PEMBAYARAN ADOPSI ---")
+    form = FormAdopsi(hewan, user, hewan.shelter)
+    print("Metode Pembayaran:\n[1] Transfer Bank\n[2] E-Wallet")
     metode = input_validasi("Pilih metode: ", ["1", "2"])
     form.set_metode_pembayaran(strategi_pembayaran[metode])
-    form.ajukan()
-    print("[✔] Status: Menunggu konfirmasi dari shelter.")
+    form.metode.bayar(form.jumlah)
+    print(f"✅ Pembayaran berhasil. Invoice ID: {form.invoice_id}")
 
     konfirmasi_adopsi = input_validasi("Apakah adopsi telah dikonfirmasi dan hewan telah Anda terima? (ya/tidak): ", ["ya", "tidak"])
     if konfirmasi_adopsi == "ya":
@@ -39,15 +69,6 @@ def proses_adopsi(hewan, user):
         rating = input_validasi("Beri rating (1-5): ", [str(i) for i in range(1, 6)])
         review = input("Tulis review Anda: ")
         print(f"Terima kasih atas rating ({rating}/5) dan review Anda: '{review}' untuk {hewan.nama}!")
-
-def proses_kunjungan(hewan):
-    print("\n--- JADWALKAN KUNJUNGAN ---")
-    print("Kunjungan ini meliputi:")
-    print("- Pengecekan lokasi shelter (untuk memastikan kondisi hewan)")
-    print("- Pengecekan kondisi tempat tinggal calon adopter (untuk memastikan kelayakan adopsi)")
-    print("Silakan hubungi shelter untuk menjadwalkan waktu yang sesuai.")
-    print(f"Kontak Shelter {hewan.shelter.nama}: (contoh: 0812-3456-7890)")
-    print("Permintaan kunjungan Anda akan diteruskan ke shelter. Mohon menunggu konfirmasi jadwal.")
 
 def simulasi():
     print("=== Selamat datang di PawPal ===")
@@ -80,17 +101,19 @@ def simulasi():
         tampilkan_detail_hewan(hewan)
 
         while True:
-            print("\n[1] Chat dengan Shelter\n[2] Ajukan Adopsi\n[3] Jadwalkan Kunjungan\n[4] Kembali")
-            aksi = input_validasi("Pilih opsi: ", ["1", "2", "3", "4"])
+            print("\n[1] Chat dengan Shelter\n[2] Ajukan Adopsi\n[3] Jadwalkan Kunjungan\n[4] Bayar Adopsi\n[5] Kembali")
+            aksi = input_validasi("Pilih opsi: ", ["1", "2", "3", "4", "5"])
 
             if aksi == "1":
                 proses_chat_shelter(hewan)
             elif aksi == "2":
                 proses_adopsi(hewan, user)
             elif aksi == "3":
-                proses_kunjungan(hewan)
+                proses_kunjungan(hewan, user)
             elif aksi == "4":
-                break  # Kembali ke menu utama
+                proses_pembayaran(hewan, user)
+            elif aksi == "5":
+                break
 
 if __name__ == "__main__":
     simulasi()
