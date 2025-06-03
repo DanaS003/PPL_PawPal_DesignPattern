@@ -40,7 +40,7 @@ def proses_kunjungan(hewan, user):
     print("- Pengecekan lokasi shelter (untuk memastikan kondisi hewan)")
     print("- Pengecekan kondisi tempat tinggal calon adopter (untuk memastikan kelayakan adopsi)")
     print("Silakan hubungi shelter untuk menjadwalkan waktu yang sesuai.")
-    print(f"Kontak Shelter {hewan.shelter.nama}: (contoh: 0812-3456-7890)")
+    print(f"Kontak Shelter {hewan.shelter.nama}: (0812-3456-7890)")
 
     tanggal_kunjungan = datetime.date.today() + datetime.timedelta(days=3)
     print(f"📅 Permintaan kunjungan Anda akan diteruskan ke shelter. Mohon menunggu konfirmasi jadwal.")
