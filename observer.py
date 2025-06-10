@@ -1,3 +1,4 @@
+# observer.py
 from abc import ABC, abstractmethod
 
 class Observer(ABC):
@@ -8,19 +9,31 @@ class Observer(ABC):
 class Shelter(Observer):
     def __init__(self, nama):
         self.nama = nama
+        self.notifikasi_masuk = [] # Untuk menyimpan notifikasi yang diterima
 
     def update(self, pesan):
-        print(f"[Notifikasi untuk {self.nama}] {pesan}")
+        self.notifikasi_masuk.append(pesan)
+        print(f"[Notifikasi untuk Shelter {self.nama}] {pesan}")
 
-class Mediator(ABC): 
-    @abstractmethod
-    def notify(self, sender, event):
-        pass
+class Adopter(Observer): # Kelas Adopter sebagai Observer juga
+    def __init__(self, nama):
+        self.nama = nama
+        self.notifikasi_masuk = []
 
-class AdoptionMediator(Mediator): 
-    def __init__(self, shelter):
-        self._shelter = shelter
+    def update(self, pesan):
+        self.notifikasi_masuk.append(pesan)
+        print(f"[Notifikasi untuk Adopter {self.nama}] {pesan}")
 
-    def notify(self, sender, event):
-        if event == "adopsi_diajukan":
-            self._shelter.update(f"Permintaan adopsi baru diajukan dari {sender.user} untuk {sender.hewan.nama}")
+class Subject: # Kelas Subject untuk mengirim notifikasi
+    def __init__(self):
+        self._observers = []
+
+    def attach(self, observer: Observer):
+        self._observers.append(observer)
+
+    def detach(self, observer: Observer):
+        self._observers.remove(observer)
+
+    def notify_observers(self, pesan):
+        for observer in self._observers:
+            observer.update(pesan)
