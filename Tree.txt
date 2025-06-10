@@ -1,0 +1,257 @@
+pawpal/
+├── .gitignore
+├── README.md
+│
+├── pawpal_mobile_app/
+│   ├── android/
+│   │   ├── app/
+│   │   │   ├── src/
+│   │   │   │   ├── main/
+│   │   │   │   │   ├── AndroidManifest.xml
+│   │   │   │   │   └── java/
+│   │   │   │   │       └── (kode native Java/Kotlin)
+│   │   │   └── build.gradle
+│   │   └── ... (file konfigurasi Android lainnya)
+│   ├── ios/
+│   │   ├── Runner/
+│   │   │   ├── info.plist
+│   │   │   └── Classes/
+│   │   │       └── (kode native Objective-C/Swift)
+│   │   └── Podfile
+│   │   └── ... (file konfigurasi iOS lainnya)
+│   ├── lib/
+│   │   ├── main.dart                                # Titik masuk utama aplikasi Flutter.
+│   │   ├── routes.dart                              # Definisi semua rute navigasi aplikasi.
+│   │   ├── injector.dart                            # File untuk setup Dependency Injection (opsional).
+│   │   │
+│   │   ├── core/                                    # Komponen inti global yang dapat dipakai ulang
+│   │   │   ├── constants/
+│   │   │   │   ├── api_constants.dart             # URL dasar API jika ada Cloud Functions HTTP.
+│   │   │   │   ├── app_strings.dart               # String teks aplikasi yang statis.
+│   │   │   │   └── app_colors.dart                # Definisi warna aplikasi.
+│   │   │   ├── error/
+│   │   │   │   ├── exceptions.dart                # Kelas untuk kesalahan dari API/Firebase.
+│   │   │   │   └── failures.dart                  # Kelas untuk kegagalan lapisan domain.
+│   │   │   ├── network/
+│   │   │   │   ├── network_info.dart              # Utility untuk cek koneksi internet.
+│   │   │   │   ├── firebase_auth_client.dart      # Wrapper untuk interaksi dasar dengan Firebase Auth SDK.
+│   │   │   │   ├── firestore_client.dart          # Wrapper untuk interaksi dasar dengan Cloud Firestore SDK.
+│   │   │   │   └── realtime_db_client.dart        # Wrapper untuk interaksi dasar dengan Firebase Realtime Database SDK.
+│   │   │   ├── util/
+│   │   │   │   ├── app_router.dart                # Implementasi router navigasi.
+│   │   │   │   ├── validators.dart                # Fungsi utilitas untuk validasi input form.
+│   │   │   │   └── date_formatters.dart           # Utilitas format tanggal/waktu.
+│   │   │   └── widgets/                           # Widget UI global yang reusable
+│   │   │       ├── custom_button.dart
+│   │   │       ├── loading_indicator.dart
+│   │   │       ├── app_bar_widget.dart
+│   │   │       └── empty_state_widget.dart
+│   │   │
+│   │   ├── features/                              # Modul-modul fitur utama aplikasi (MVVM per fitur)
+│   │   │   ├── auth/                              # Fitur Autentikasi
+│   │   │   │   ├── data/
+│   │   │   │   │   ├── datasources/
+│   │   │   │   │   │   └── auth_firebase_datasource.dart
+│   │   │   │   │   └── models/
+│   │   │   │   │       ├── user_model.dart
+│   │   │   │   │       └── credentials_model.dart
+│   │   │   │   ├── domain/
+│   │   │   │   │   ├── entities/
+│   │   │   │   │   │   └── user.dart
+│   │   │   │   │   └── usecases/
+│   │   │   │   │       ├── login_user.dart
+│   │   │   │   │       ├── register_user.dart
+│   │   │   │   │       └── reset_password.dart
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── pages/
+│   │   │   │   │   │   ├── login_page.dart
+│   │   │   │   │   │   └── register_page.dart
+│   │   │   │   │   ├── viewmodels/
+│   │   │   │   │   │   ├── login_viewmodel.dart
+│   │   │   │   │   │   └── register_viewmodel.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── auth_form_fields.dart
+│   │   │   │   └── repository/
+│   │   │   │       └── auth_repository_impl.dart
+│   │   │   ├── pets/                              # Fitur Manajemen Hewan (FR-01)
+│   │   │   │   ├── data/
+│   │   │   │   │   ├── datasources/
+│   │   │   │   │   │   ├── pet_firestore_datasource.dart
+│   │   │   │   │   │   └── pet_storage_datasource.dart
+│   │   │   │   │   └── models/
+│   │   │   │   │       ├── pet_model.dart
+│   │   │   │   │       ├── pet_image_model.dart
+│   │   │   │   │       └── medical_report_model.dart
+│   │   │   │   ├── domain/
+│   │   │   │   │   ├── entities/
+│   │   │   │   │   │   ├── pet.dart
+│   │   │   │   │   │   └── medical_report.dart
+│   │   │   │   │   └── usecases/
+│   │   │   │   │       ├── get_all_pets.dart
+│   │   │   │   │       ├── add_new_pet.dart
+│   │   │   │   │       ├── update_pet.dart
+│   │   │   │   │       └── delete_pet.dart
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── pages/
+│   │   │   │   │   │   ├── pet_list_page.dart
+│   │   │   │   │   │   ├── pet_detail_page.dart
+│   │   │   │   │   │   └── add_edit_pet_page.dart
+│   │   │   │   │   └── viewmodels/
+│   │   │   │   │       ├── pet_list_viewmodel.dart
+│   │   │   │   │       ├── pet_detail_viewmodel.dart
+│   │   │   │   │       └── add_edit_pet_viewmodel.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── pet_card.dart
+│   │   │   │   └── repository/
+│   │   │   │       └── pet_repository_impl.dart
+│   │   │   ├── adoption_flow/                     # Fitur Alur Adopsi (FR-02, FR-03, FR-04, FR-05)
+│   │   │   │   ├── data/
+│   │   │   │   │   ├── datasources/
+│   │   │   │   │   │   ├── adoption_firestore_datasource.dart
+│   │   │   │   │   │   ├── payment_cloud_function_datasource.dart
+│   │   │   │   │   │   └── agreement_cloud_function_datasource.dart
+│   │   │   │   │   └── models/
+│   │   │   │   │       ├── adoption_application_model.dart
+│   │   │   │   │       ├── home_assessment_model.dart
+│   │   │   │   │       └── payment_model.dart
+│   │   │   │   ├── domain/
+│   │   │   │   │   ├── entities/
+│   │   │   │   │   │   ├── adoption_application.dart
+│   │   │   │   │   │   ├── home_assessment.dart
+│   │   │   │   │   │   └── payment.dart
+│   │   │   │   │   └── usecases/
+│   │   │   │   │       ├── submit_adoption_request.dart
+│   │   │   │   │       ├── schedule_home_assessment.dart
+│   │   │   │   │       ├── verify_application_status.dart
+│   │   │   │   │       ├── process_payment.dart
+│   │   │   │   │       ├── generate_and_send_agreement.dart
+│   │   │   │   │       └── schedule_pet_pickup.dart
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── pages/
+│   │   │   │   │   │   ├── adoption_form_page.dart
+│   │   │   │   │   │   ├── home_assessment_schedule_page.dart
+│   │   │   │   │   │   ├── payment_page.dart
+│   │   │   │   │   │   ├── adoption_status_page.dart
+│   │   │   │   │   │   └── pet_pickup_schedule_page.dart
+│   │   │   │   │   └── viewmodels/
+│   │   │   │   │       ├── adoption_form_viewmodel.dart
+│   │   │   │   │       ├── home_assessment_viewmodel.dart
+│   │   │   │   │       ├── payment_viewmodel.dart
+│   │   │   │   │       └── adoption_status_viewmodel.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── adoption_status_card.dart
+│   │   │   │   └── repository/
+│   │   │   │       └── adoption_repository_impl.dart
+│   │   │   ├── chat/                              # Fitur Chat (FR-06)
+│   │   │   │   ├── data/
+│   │   │   │   │   ├── datasources/
+│   │   │   │   │   │   └── chat_realtime_db_datasource.dart
+│   │   │   │   │   └── models/
+│   │   │   │   │       └── message_model.dart
+│   │   │   │   ├── domain/
+│   │   │   │   │   ├── entities/
+│   │   │   │   │   │   └── message.dart
+│   │   │   │   │   └── usecases/
+│   │   │   │   │       ├── send_message.dart
+│   │   │   │   │       ├── get_chat_history.dart
+│   │   │   │   │       └── stream_new_messages.dart
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── pages/
+│   │   │   │   │   │   └── chat_page.dart
+│   │   │   │   │   └── viewmodels/
+│   │   │   │   │       └── chat_viewmodel.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── message_bubble.dart
+│   │   │   │   └── repository/
+│   │   │   │       └── chat_repository_impl.dart
+│   │   │   └── reviews/                           # Fitur Rating & Review (FR-06)
+│   │   │       ├── data/
+│   │   │       │   ├── datasources/
+│   │   │       │   │   └── review_firestore_datasource.dart
+│   │   │       │   └── models/
+│   │   │       │       └── review_model.dart
+│   │   │       ├── domain/
+│   │   │       │   ├── entities/
+│   │   │       │   │   └── review.dart
+│   │   │       │   └── usecases/
+│   │   │       │       ├── submit_review.dart
+│   │   │       │       └── get_shelter_reviews.dart
+│   │   │       ├── presentation/
+│   │   │       │   ├── pages/
+│   │   │       │   │   ├── review_page.dart
+│   │   │       │   │   └── shelter_reviews_page.dart
+│   │   │       │   ├── viewmodels/
+│   │   │       │   │   ├── review_viewmodel.dart
+│   │   │       │   │   └── shelter_reviews_viewmodel.dart
+│   │   │       │   └── widgets/
+│   │   │       │       └── rating_stars.dart
+│   │   │       └── repository/
+│   │   │           └── review_repository_impl.dart
+│   │   └── common_widgets/ # Generic widgets used across multiple features
+│   │       └── app_dialogs.dart
+│   ├── pubspec.yaml
+│   ├── pubspec.lock
+│   ├── README.md
+│   └── .gitignore
+│
+├── pawpal_firebase/
+│   ├── .firebaserc                          # Konfigurasi proyek Firebase lokal.
+│   ├── firebase.json                        # Konfigurasi umum Firebase project.
+│   ├── firestore.rules                      # Aturan keamanan Cloud Firestore.
+│   ├── firestore.indexes.json               # Konfigurasi indeks kustom Cloud Firestore.
+│   ├── database.rules.json                  # Aturan keamanan Firebase Realtime Database.
+│   ├── storage.rules                        # Aturan keamanan Firebase Cloud Storage.
+│   ├── README.md                            # Deskripsi proyek Firebase.
+│   ├── .gitignore                           # File yang diabaikan oleh Git.
+│   │
+│   └── functions/                           # Direktori untuk kode sumber Cloud Functions
+│       ├── package.json                     # Definisi proyek Node.js dan dependensi.
+│       ├── package-lock.json                # Kunci dependensi yang terinstal.
+│       ├── tsconfig.json                    # Konfigurasi TypeScript untuk proyek fungsi.
+│       ├── .eslintrc.js                     # Aturan linter untuk kode fungsi.
+│       ├── src/                             # Kode sumber Cloud Functions (jika pakai TypeScript)
+│       │   ├── index.ts                     # Titik masuk utama semua Cloud Functions.
+│       │   ├── auth/
+│   │   │   │   ├── auth_triggers.ts
+│   │   │   │   └── user_management_api.ts
+│   │   │   ├── pets/
+│   │   │   │   ├── pet_firestore_triggers.ts
+│   │   │   │   └── pet_api.ts
+│   │   │   ├── adoption_flow/
+│   │   │   │   ├── application_firestore_triggers.ts
+│   │   │   │   ├── home_assessment_api.ts
+│   │   │   │   ├── payment_api.ts
+│   │   │   │   ├── agreement_generator_api.ts
+│   │   │   │   └── pickup_schedule_api.ts
+│   │   │   ├── chat/
+│   │   │   │   └── chat_realtime_db_triggers.ts
+│   │   │   ├── reviews/
+│   │   │   │   └── review_firestore_triggers.ts
+│   │   │   ├── notifications/
+│   │   │   │   └── fcm_utils.ts
+│   │   │   ├── utils/
+│   │   │   │   ├── constants.ts
+│   │   │   │   └── environment_config.ts
+│   │   │   └── services/
+│   │   │       ├── payment_gateway_service.ts
+│   │   │       ├── email_service.ts
+│   │   │       └── pdf_generation_service.ts
+│   │   └── lib/                             # Output kompilasi JavaScript dari `src/`
+│
+├── docs/                                  # Dokumentasi proyek
+│   ├── dppl/
+│   │   └── PawPal_DPPL_v1.0.docx
+│   ├── diagrams/
+│   │   ├── client_server_architecture.mmd
+│   │   ├── mvvm_architecture.mmd
+│   │   ├── baas_architecture.mmd
+│   │   ├── activity_diagrams/
+│   │   │   └── add_pet_activity.mmd
+│   │   │   └── ...
+│   │   └── class_diagram.mmd
+│   ├── database_schema/
+│   │   ├── pawpal_firestore_collections.md
+│   │   └── pawpal_rtdb_structure.md
+│   └── README.md
+│
+└── README.md                              # README utama proyek
